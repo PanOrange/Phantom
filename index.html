@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="css/normalize.css">
 	<link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="is-loading">
 	<nav class="menu">
 		<h2>Menu</h2>
 		<ul>
@@ -206,35 +206,46 @@
 
 	<script>
 	
+		var body = document.body;
 		var menuBtn = document.querySelector('.menu-btn');
 		var menu = document.querySelector('.menu');
 		var exit = document.querySelector('.menu-exit');
 		var cover = document.querySelector('.cover');
 
-		function addClick(elem) {
-			elem.addEventListener('click', function(e) {
-				e.preventDefault();
-
-				toggleClass(menu, 'visible') == true ?
-				cover.style.display = "none" :
-				cover.style.display = "block";
-			});
-		}
+		window.addEventListener('load', function() {
+			setTimeout(function() {
+				toggleClass(body, 'is-loading');
+			}, 100);
+		});
 
 		addClick(menuBtn);
 		addClick(exit);
 		addClick(cover);
 
+		function addClick(elem) {
+			elem.addEventListener('click', function(e) {
+				e.preventDefault();
+
+				toggleClass(menu, 'visible');
+				toggleClass(exit, 'active');
+				toggleClass(cover, 'show');
+			});
+		}		
+
 		function toggleClass(elem, cls) {
 			var arr = elem.getAttribute('class').split(' ');
-
-			if (arr.some(function(el, i) { if(el == cls) {arr.splice(i, 1); return true;} })) {
-				elem.setAttribute('class', arr.join(' ') );
-				return true;
-			} else {
-				arr.push(cls);
-				elem.setAttribute('class', arr.join(' ') );
+			var hasClass = arr.some(function(el, i) {
+				if(el == cls) {
+					arr.splice(i, 1); return true;
+				}
+			});
+			
+			if (!hasClass) {
+				arr.push(cls);				
 			}
+
+			elem.setAttribute('class', arr.join(' ') );
+
 		}
 
 	</script>
